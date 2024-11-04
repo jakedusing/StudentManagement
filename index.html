@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Management</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        margin-bottom: 20px;
+      }
+      button {
+        margin-top: 10px;
+      }
+      .course-list {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Student Management System</h1>
+
+    <div class="container">
+      <h2>Enter Student Details</h2>
+      <label for="studentName">Name:</label>
+      <input type="text" id="studentName" required />
+      <br />
+      <label for="studentAge">Age:</label>
+      <input type="number" id="studentAge" required />
+      <br />
+      <label for="studentMajor">Major:</label>
+      <input type="text" id="studentMajor" required />
+      <br />
+      <button id="createStudent">Create Student</button>
+    </div>
+
+    <div class="container" id="studentActions" style="display: none">
+      <h2>Actions for <span id="studentDisplayName"></span></h2>
+      <label for="courseName">Enroll in Course:</label>
+      <input type="text" id="courseName" />
+      <button id="enrollCourse">Enroll</button>
+
+      <label for="courseGrade">Add Grade:</label>
+      <select id="courseSelect"></select>
+      <input type="number" id="courseGrade" min="0" max="100" />
+      <button id="addGrade">Add Grade</button>
+
+      <h3>GPA: <span id="gpaDisplay">0.00</span></h3>
+
+      <div class="course-list">
+        <h3>Enrolled Courses:</h3>
+        <ul id="courseList"></ul>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
