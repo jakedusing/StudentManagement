@@ -85,11 +85,37 @@ class Student extends Person {
 // Global student variable
 let student;
 
+// Function to enable/disable "Create Student" button based on form validation
+function checkFormValidation() {
+  const name = document.getElementById("studentName").value.trim();
+  const age = document.getElementById("studentAge").value.trim();
+  const major = document.getElementById("studentMajor").value.trim();
+  const button = document.getElementById("createStudent").value;
+
+  // Enable the button only if all fields are filled
+  if (name && age && major) {
+    button.disabled = false;
+  } else {
+    button.disabled = true;
+  }
+}
+
 // Function to create a new student
 document.getElementById("createStudent").onclick = () => {
+  //Prevent form submission if button is clicked when disabled
+  if (document.getElementById("createStudent").disabled) {
+    event.preventDefault();
+    return;
+  }
   const name = document.getElementById("studentName").value;
   const age = parseInt(document.getElementById("studentAge").value);
   const major = document.getElementById("studentMajor").value;
+
+  // Validate that the age is a number and greater than 0
+  if (!name || !age || !major || isNaN(age) || age <= 0) {
+    alert("Please fill in all fields with valid information");
+    return;
+  }
 
   // create a new student instance
   student = new Student(name, age, major);
@@ -102,9 +128,28 @@ document.getElementById("createStudent").onclick = () => {
   document.getElementById("studentMajor").disabled = true;
   document.getElementById("createStudent").disabled = true;
 
-  document.getElementById("studentName").value = "";
+  // Hide the "Create Student" form smoothly without shifting
+  document.querySelector(".container").style.opacity = "0";
+  setTimeout(() => {
+    document.querySelector(".container").style.display = "none";
+  }, 300);
+
+  // Adding the event listener for real-time form validation
+  document
+    .getElementById("studentName")
+    .addEventListener("input", checkFormValidation);
+  document
+    .getElementById("studentAge")
+    .addEventListener("input", checkFormValidation);
+  document
+    .getElementById("studentMajor")
+    .addEventListener("input", checkFormValidation);
+
+  document.getElementById("createStudent").disabled = true;
+
+  /*document.getElementById("studentName").value = "";
   document.getElementById("studentAge").value = "";
-  document.getElementById("studentMajor").value = "";
+  document.getElementById("studentMajor").value = ""; */
 };
 
 // Function to enroll in a course
@@ -132,6 +177,15 @@ document.getElementById("addGrade").onclick = () => {
   document.getElementById("gpaDisplay").innerText = student.getGPA();
 };
 
+// Function to convert numeric grade to letter grade
+function getLetterGrade(grade) {
+  if (grade >= 90) return "A";
+  if (grade >= 80) return "B";
+  if (grade >= 70) return "C";
+  if (grade >= 60) return "D";
+  return "F";
+}
+
 // Function to update the course list display
 function updateCourseList() {
   const courseList = document.getElementById("courseList");
@@ -143,11 +197,22 @@ function updateCourseList() {
   // loop through each enrolled course
   for (const course in student.courses) {
     const listItem = document.createElement("li"); // create new list item
-    listItem.textContent = `${course}: ${
+    const grade = student.courses[course];
+
+    //display the grade with letter grade if it's not null, otherwise show "No grade yet"
+    if (grade !== null) {
+      listItem.textContent = `${course}: Grade: ${grade} (${getLetterGrade(
+        grade
+      )})`;
+    } else {
+      listItem.textContent = `${course}: No grade yet`;
+    }
+
+    /* listItem.textContent = `${course}: ${
       student.courses[course] !== null
         ? student.courses[course]
         : "No grade yet"
-    }`;
+    }`; */
     courseList.appendChild(listItem); //add list item to the course list
 
     const option = document.createElement("option"); // create a new option for the dropdown
